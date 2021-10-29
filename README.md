@@ -45,15 +45,15 @@ Three packages containing stub classes will be generated: `java.io`, `java.lang`
 
 ## Remove generics from VerifiedIdentityHashMap
 * select your project, and right-click on it for the context menu,
-* from the context menu, choose Remove Generics (this will fail the first time, with errors on two lines),
-* fix the errors on line 1148 and 1160 (they are similar) by changing `AbstractMap.SimpleEntry<>` to `AbstractMap.SimpleEntry<Object, Object>`, and retry removing the generics. This time you should succeed.
+* from the context menu, choose Remove Generics (this will fail the first time, with errors on lines 1152 and 1164),
+* fix the errors on lines 1152 and 1164 (they are similar) by changing `AbstractMap.SimpleEntry<>` to `AbstractMap.SimpleEntry<Object, Object>`, and retry removing the generics. This time you should succeed.
 
 ## Fix some problems after removing generics
 Some trivial problems occur after removing the generics. These have to be fixed mannually:
-* on line 504 and 505 a class cast is now required; change these lines from:
+* on line 501 a class cast is now required; change lines 500-501 from:
   ```
   for (Entry e: m.entrySet())
-	  put(e.getKey(), e.getValue());
+      put(e.getKey(), e.getValue());
   ```
   to:
   ```
