@@ -464,45 +464,53 @@ public class VerifiedIdentityHashMap
      * MAXIMUM_CAPACITY.
      */
     /*+KEY@ 
-      @ // In case an overflow occurred while calculating minCapacity, or
-      @ // minCapacity is too large, return MAXIMUM_CAPACITY
       @ private normal_behavior
-      @   requires
-      @     (expectedMaxSize % 2 + (expectedMaxSize / 2) * 3) < 0 || 
-      @     (expectedMaxSize % 2 + (expectedMaxSize / 2) * 3) > MAXIMUM_CAPACITY;
+      @   requires 
+      @     expectedMaxSize > MAXIMUM_CAPACITY / (\bigint)3;
       @   ensures
       @     \result == MAXIMUM_CAPACITY;
-      @
-      @ // In case minCapacity is within the bounds [MIN..MAX]
-      @ also
+      @     
       @ private normal_behavior
-      @   requires
-      @     (expectedMaxSize % 2 + (expectedMaxSize / 2) * 3) > MINIMUM_CAPACITY &&
-      @     (expectedMaxSize % 2 + (expectedMaxSize / 2) * 3) <= MAXIMUM_CAPACITY;
+      @   requires 
+      @     expectedMaxSize <= MAXIMUM_CAPACITY / (\bigint)3 &&
+      @     expectedMaxSize <= (\bigint)2 * MINIMUM_CAPACITY / 3;
       @   ensures
-      @     \result >= (expectedMaxSize % 2 + (expectedMaxSize / 2) * 3) &&
-      @     \result < (expectedMaxSize * 3);
+      @     \result == MINIMUM_CAPACITY;
+      @ 
+      @ private normal_behavior
+      @   requires 
+      @     expectedMaxSize <= MAXIMUM_CAPACITY / (\bigint)3 &&
+      @     expectedMaxSize > (\bigint)2 * MINIMUM_CAPACITY / 3;
+      @   ensures
+      @     \result >= (((\bigint)3 * expectedMaxSize) / 2) &&
+      @     \result < ((\bigint)3 * expectedMaxSize);
       @   ensures
       @     (\exists \bigint i;
       @       0 <= i < \result;
       @       \dl_pow(2,i) == \result); // result is a power of two
-      @
-      @ also
-      @ private normal_behavior
-      @   requires
-      @     (expectedMaxSize % 2 + (expectedMaxSize / 2) * 3) >= 0 &&
-      @     (expectedMaxSize % 2 + (expectedMaxSize / 2) * 3) <= MINIMUM_CAPACITY;
-      @   ensures
-      @     \result == MINIMUM_CAPACITY;
       @*/
     /*+OPENJML@ 
       @ private normal_behavior
-      @   requires
-      @     ((3 * expectedMaxSize) / 2) >= MINIMUM_CAPACITY &&
-      @     ((3 * expectedMaxSize) / 2) <= MAXIMUM_CAPACITY;
+      @   requires 
+      @     expectedMaxSize > MAXIMUM_CAPACITY / 3;
+      @   ensures
+      @     \result == MAXIMUM_CAPACITY;
+      @     
+      @ private normal_behavior
+      @   requires 
+      @     expectedMaxSize <= MAXIMUM_CAPACITY / 3 &&
+      @     expectedMaxSize <= 2 * MINIMUM_CAPACITY / 3;
+      @   ensures
+      @     \result == MINIMUM_CAPACITY;
+      @ 
+      @ private normal_behavior
+      @   requires 
+      @     expectedMaxSize <= MAXIMUM_CAPACITY / 3 &&
+      @     expectedMaxSize > 2 * MINIMUM_CAPACITY / 3;
       @   ensures
       @     \result >= ((3 * expectedMaxSize) / 2) &&
-      @     \result < (3 * expectedMaxSize) &&
+      @     \result < (3 * expectedMaxSize);
+      @   ensures
       @     (\result & (\result - 1)) == 0; // result is a power of two
       @*/
     private static /*@ strictly_pure @*/ int capacity(int expectedMaxSize) {
