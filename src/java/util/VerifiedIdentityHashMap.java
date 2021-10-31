@@ -222,9 +222,6 @@ public class VerifiedIdentityHashMap
     /*+OPENJML@ // JML for non-KeY tools, i.e. JJBMC
       @ public invariant
       @   table != null &&
-      @   MINIMUM_CAPACITY == 4 &&
-      @   DEFAULT_CAPACITY == 4 &&
-      @   MAXIMUM_CAPACITY == 4; // &&
       @   //MINIMUM_CAPACITY * 2 <= table.length  && // is no longer valid as we set min and max to 4
       @   //MAXIMUM_CAPACITY * 2 >= table.length;
       @
@@ -375,8 +372,6 @@ public class VerifiedIdentityHashMap
      */
     /*+KEY@ 
       @ public normal_behavior
-      @   requires
-      @     DEFAULT_CAPACITY == 32;
       @   ensures
       @     table != null &&
       @     table.length == (\bigint)2 * DEFAULT_CAPACITY &&
@@ -390,8 +385,6 @@ public class VerifiedIdentityHashMap
       @*/
     /*+OPENJML@ 
       @ public normal_behavior
-      @   requires
-      @     DEFAULT_CAPACITY == 4;
       @   ensures
       @     table != null &&
       @     table.length == 2 * DEFAULT_CAPACITY &&
@@ -528,8 +521,6 @@ public class VerifiedIdentityHashMap
     /*+KEY@ 
       @ private normal_behavior
       @   requires
-      @     MINIMUM_CAPACITY == 4 &&
-      @     MAXIMUM_CAPACITY == 536870912 &&
       @     (\exists \bigint i; 0 <= i < initCapacity; \dl_pow(2,i) == initCapacity) &&
       @     initCapacity >= MINIMUM_CAPACITY &&
       @     initCapacity <= MAXIMUM_CAPACITY &&
@@ -547,8 +538,6 @@ public class VerifiedIdentityHashMap
     /*+OPENJML@ 
       @ private normal_behavior
       @   requires
-      @     MINIMUM_CAPACITY == 4 &&
-      @     MAXIMUM_CAPACITY == 4 &&
       @     (initCapacity & (initCapacity - 1)) == 0 &&
       @     initCapacity >= MINIMUM_CAPACITY &&
       @     initCapacity <= MAXIMUM_CAPACITY;
@@ -1100,7 +1089,6 @@ public class VerifiedIdentityHashMap
       @ // threshold == MAXIMUM_CAPACITY - 1.
       @ private exceptional_behavior
       @   requires
-      @     MAXIMUM_CAPACITY == 536870912 &&
       @     table != null &&
       @     table.length == 2 * MAXIMUM_CAPACITY &&
       @     threshold == MAXIMUM_CAPACITY - 1;
@@ -1116,7 +1104,6 @@ public class VerifiedIdentityHashMap
       @ private normal_behavior
       @   requires
       @     table != null &&
-      @     MAXIMUM_CAPACITY == 536870912 &&
       @     table.length == 2 * MAXIMUM_CAPACITY &&
       @     threshold < MAXIMUM_CAPACITY - 1;
       @   assignable
@@ -1143,8 +1130,6 @@ public class VerifiedIdentityHashMap
       @ // then rehash the table to re-establish the class invariant.
       @ private normal_behavior
       @   requires
-      @     MINIMUM_CAPACITY == 4 &&
-      @     MAXIMUM_CAPACITY == 536870912 &&
       @     table != null &&
       @     table.length >= 2 * MINIMUM_CAPACITY &&
       @     table.length < 2 * MAXIMUM_CAPACITY &&
