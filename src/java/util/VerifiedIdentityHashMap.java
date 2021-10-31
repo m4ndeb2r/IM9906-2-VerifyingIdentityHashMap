@@ -937,7 +937,7 @@ public class VerifiedIdentityHashMap
      * @see     #get(Object)
      * @see     #containsKey(Object)
      */
-    /*+KEY@ 
+    /*-KEY@ 
       @ also
       @ public exceptional_behavior
       @   requires
@@ -1095,7 +1095,7 @@ public class VerifiedIdentityHashMap
      * @param newCapacity the new capacity, must be a power of two.
      * @return whether a resize did in fact take place
      */
-    /*+KEY@ 
+    /*-KEY@ 
       @ // Throws an exception when table.length == 2 * MAXIMUM_CAPACITY &&
       @ // threshold == MAXIMUM_CAPACITY - 1.
       @ private exceptional_behavior
@@ -1421,7 +1421,7 @@ public class VerifiedIdentityHashMap
      * @param m mappings to be stored in this map
      * @throws NullPointerException if the specified map is null
      */
-    /*+KEY@
+    /*-KEY@
       @ also
       @ public exceptional_behavior
       @   requires
@@ -1753,7 +1753,7 @@ public class VerifiedIdentityHashMap
       @   requires true;
       @   ensures
       @     size == \old(size) &&
-      @     threshold == \old(threshold) &&
+//      @     threshold == \old(threshold) &&
       @     table.length == \old(table.length )&&
       @     
       @     // All elements are still present
@@ -1771,7 +1771,7 @@ public class VerifiedIdentityHashMap
       @   requires true;
       @   ensures
       @     size == \old(size) &&
-      @     threshold == \old(threshold) &&
+//      @     threshold == \old(threshold) &&
       @     table.length == \old(table.length )&&
       @     
       @     // All elements are still present
@@ -1967,7 +1967,7 @@ public class VerifiedIdentityHashMap
       @ private normal_behavior
       @   ensures
       @     ((VerifiedIdentityHashMap)\result).size == size &&
-      @     ((VerifiedIdentityHashMap)\result).threshold == threshold &&
+//      @     ((VerifiedIdentityHashMap)\result).threshold == threshold &&
       @     ((VerifiedIdentityHashMap)\result).entrySet == null &&
       @     ((VerifiedIdentityHashMap)\result).values == null &&
       @     ((VerifiedIdentityHashMap)\result).keySet == null &&
@@ -1980,7 +1980,7 @@ public class VerifiedIdentityHashMap
       @ private normal_behavior
       @   ensures
       @     ((VerifiedIdentityHashMap)\result).size == size &&
-      @     ((VerifiedIdentityHashMap)\result).threshold == threshold &&
+//      @     ((VerifiedIdentityHashMap)\result).threshold == threshold &&
       @     ((VerifiedIdentityHashMap)\result).entrySet == null &&
       @     ((VerifiedIdentityHashMap)\result).values == null &&
       @     ((VerifiedIdentityHashMap)\result).keySet == null &&
