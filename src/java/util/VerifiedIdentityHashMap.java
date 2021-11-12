@@ -1092,14 +1092,13 @@ public class VerifiedIdentityHashMap
      * @param newCapacity the new capacity, must be a power of two.
      * @return whether a resize did in fact take place
      */
-    /*-KEY@ 
+    /*+KEY@ 
       @ // Throws an exception when table.length == 2 * MAXIMUM_CAPACITY &&
-      @ // threshold == MAXIMUM_CAPACITY - 1.
+      @ // size == MAXIMUM_CAPACITY - 1.
       @ private exceptional_behavior
       @   requires
-      @     table != null &&
-      @     table.length == 2 * MAXIMUM_CAPACITY &&
-      @     threshold == MAXIMUM_CAPACITY - 1;
+      @     table.length == (\bigint)2 * MAXIMUM_CAPACITY &&
+      @     size == MAXIMUM_CAPACITY - 1;
       @   assignable
       @     \nothing;
       @   signals_only
@@ -1107,121 +1106,50 @@ public class VerifiedIdentityHashMap
       @   signals
       @     (IllegalStateException e) true;
       @
-      @ // Only the threshold changes if table.length == 2 * MAXIMUM_CAPACITY &&
-      @ // threshold < MAXIMUM_CAPACITY - 1.
+      @ // Nothing changes if table.length == 2 * MAXIMUM_CAPACITY &&
+      @ // size < MAXIMUM_CAPACITY - 1.
       @ private normal_behavior
       @   requires
-      @     table != null &&
-      @     table.length == 2 * MAXIMUM_CAPACITY &&
-      @     threshold < MAXIMUM_CAPACITY - 1;
+      @     table.length == (\bigint)2 * MAXIMUM_CAPACITY &&
+      @     size < MAXIMUM_CAPACITY - 1;
       @   assignable
-      @     threshold;
-      @   ensures    
-      @     threshold == MAXIMUM_CAPACITY - 1;
+      @     \strictly_nothing;
+      @   ensures
+      @     \result == false;
       @
-      @ // The heap stays unchanged when table.length >= 2 * newCapacity.
+      @ // Nothing changes when table.length < 2 * MAXIMUM_CAPACITY &&
+	  @ // table.length >= 2 * newCapacity.
       @ private normal_behavior
       @   requires
-      @     table != null &&
-      @     table.length < 2 * MAXIMUM_CAPACITY &&
-      @     table.length >= 2 * newCapacity;
-      @
-      @   // Bounds on newCapacity: it is a power of two, and lte 2* MAX_CAPACITY
-      @   requires
-      @     newCapacity <= 2 * MAXIMUM_CAPACITY &&
-      @     newCapacity >= MINIMUM_CAPACITY;
-      @
+      @     table.length < (\bigint)2 * MAXIMUM_CAPACITY &&
+      @     table.length >= (\bigint)2 * newCapacity &&
+      @     newCapacity >= MINIMUM_CAPACITY &&
+      @     newCapacity <= (\bigint)2 * MAXIMUM_CAPACITY;
+      @	  
       @   assignable
       @     \strictly_nothing;
       @
+      @	// Map is unchanged, so return false
+      @   ensures
+      @     \result == false;
+      @
+      @
       @ // If we actually resize (table.length < 2 * MAXIMUM_CAPACITY && table.length < 2 * newCapacity)
-      @ // then rehash the table to re-establish the class invariant.
+      @ // then rehash the table with the new length to re-establish the class invariant.
       @ private normal_behavior
       @   requires
-      @     table != null &&
-      @     table.length >= 2 * MINIMUM_CAPACITY &&
-      @     table.length < 2 * MAXIMUM_CAPACITY &&
-      @     table.length < 2 * newCapacity;
-      @
-      @   // Bounds on newCapacity: it is a power of two, and <= 2* MAX_CAPACITY
-      @   requires
+      @     table.length < (\bigint)2 * newCapacity &&
+      @     newCapacity <= MAXIMUM_CAPACITY &&
+      @     newCapacity >= MINIMUM_CAPACITY &&
       @     (\exists \bigint i;
       @       0 <= i < newCapacity;
-      @       \dl_pow(2,i) == newCapacity) &&
-      @     newCapacity <= 2 * MAXIMUM_CAPACITY &&
-      @     newCapacity >= MINIMUM_CAPACITY;
-      @
-      @   // For all key-value pairs: if key == null, then value == null
-      @   requires
-      @     (\forall \bigint i;
-      @           0 <= i && i < table.length / (\bigint)2;
-      @           (table[i * 2] == null ==> table[i * 2 + 1] == null));
-      @
-      @   // Non-empty keys are unique
-      @   requires
-      @     (\forall \bigint i; 0 <= i && i < table.length / (\bigint)2;
-      @         (\forall \bigint j;
-      @         i <= j && j < table.length / (\bigint)2;
-      @         (table[2 * i] != null && table[2 * i] == table[2 * j]) ==> i == j));
-      @
-      @   // Size equals the number of non-empty keys in the table
-      @   requires
-      @     size == (\num_of \bigint i;
-      @         0 <= i < table.length / (\bigint)2;
-      @         table[2 * i] != null);
-      @
-      @   // Table length is a power of two
-      @   requires
-      @     (\exists \bigint i;
-      @         0 <= i < table.length;
-      @         \dl_pow(2,i) == table.length);
-      @
-      @   // Table length is always an even number
-      @   requires
-      @     table.length % (\bigint)2 == 0;
-      @
-      @   // Table must have at least one empty key-element to prevent
-      @   // infinite loops when a key is not present.
-      @   requires
-      @     (\exists \bigint i;
-      @         0 <= i < table.length / (\bigint)2;
-      @         table[2 * i] == null);
-      @
-      @   // There are no gaps between a key's hashed index and its actual
-      @   // index (if the key is at a higher index than the hash code)
-      @   requires
-      @     (\forall \bigint i;
-      @         0 <= i < table.length / (\bigint)2;
-      @         table[2 * i] != null && 2 * i > \dl_genHash(table[2 * i], table.length) ==>
-      @         (\forall \bigint j;
-      @             \dl_genHash(table[2 * i], table.length) / (\bigint)2 <= j < i;
-      @             table[2 * j] != null));
-      @
-      @   // There are no gaps between a key's hashed index and its actual
-      @   // index (if the key is at a lower index than the hash code)
-      @   requires
-      @     (\forall \bigint i;
-      @         0 <= i < table.length / (\bigint)2;
-      @         table[2 * i] != null && 2 * i < \dl_genHash(table[2 * i], table.length) ==>
-      @         (\forall \bigint j;
-      @             \dl_genHash(table[2 * i], table.length) <= 2 * j < table.length || 0 <= 2 * j < 2 * i;
-      @             table[2 * j] != null));
-      @
-      @   // All keys and values are of type Object
-      @   requires
-      @     \typeof(table) == \type(Object[]);
-      @
-      @   // Bounds on threshold in relation to table.length and MAXIMUM_CAPACITY
-      @   requires
-      @     threshold < MAXIMUM_CAPACITY - 1 &&
-      @     threshold == table.length / 3 &&
-      @     size <= threshold;
+      @       \dl_pow(2,i) == newCapacity);
       @
       @   assignable
-      @     threshold, table, table[*];
+      @     table, table[*];
       @
       @   ensures
-      @     table.length == (newCapacity * 2);
+      @     table.length == (newCapacity * (\bigint)2);
       @
       @   ensures
       @     // After execution, all old entries are still present
@@ -1231,11 +1159,13 @@ public class VerifiedIdentityHashMap
       @         0 <= j < table.length && j % 2 == 0;
       @         \old(table[i]) == table[j] && \old(table[i + 1]) == table[j + 1]));
       @
+      @	// Map is changed, so return true
       @   ensures
-      @     \invariant_for(this);
+      @     \result == true;
       @    
       @*/
     /*+OPENJML@ 
+      @ // TODO
       @ private normal_behavior
       @   requires
       @     (newCapacity & (newCapacity - 1)) == 0 &&
@@ -1258,7 +1188,7 @@ public class VerifiedIdentityHashMap
       @         0 <= j < table.length / 2;
       @         \old(table[i * 2]) == table[j * 2] && \old(table[i * 2 + 1]) == table[j * 2 + 1]));
       @*/
-    private boolean /*@ helper @*/ resize(int newCapacity)
+    private boolean resize(int newCapacity)
         // assert (newCapacity & -newCapacity) == newCapacity; // power of 2
     {
         int newLength =  newCapacity * 2;
