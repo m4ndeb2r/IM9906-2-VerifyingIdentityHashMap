@@ -1118,7 +1118,7 @@ public class VerifiedIdentityHashMap
       @     \result == false;
       @
       @ // Nothing changes when table.length < 2 * MAXIMUM_CAPACITY &&
-	  @ // table.length >= 2 * newCapacity.
+      @ // table.length >= 2 * newCapacity.
       @ private normal_behavior
       @   requires
       @     table.length < (\bigint)2 * MAXIMUM_CAPACITY &&
