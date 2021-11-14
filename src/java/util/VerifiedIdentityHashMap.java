@@ -362,7 +362,7 @@ public class VerifiedIdentityHashMap
       @   ensures key == NULL_KEY ==> \result == null;
       @   ensures key != NULL_KEY ==> \result == key;
       @*/
-    private /*@ spec_public @*/ static /*@ pure nullable @*/ Object unmaskNull(Object key) {
+    private /*@ spec_public @*/ static /*@ strictly_pure nullable @*/ Object unmaskNull(Object key) {
         return (key == NULL_KEY ? null : key);
     }
 
