@@ -712,7 +712,7 @@ public class VerifiedIdentityHashMap
        @             table[i * 2] == maskNull(key) && table[i * 2 + 1] == null)
        @         );
        @*/
-     public /*@ pure nullable @*/ java.lang.Object get(Object key) {
+     public /*@ pure nullable @*/ java.lang.Object get(/*@ nullable @*/ Object key) {
         Object k =  maskNull(key);
         Object[] tab =  table;
         int len =  tab.length;
