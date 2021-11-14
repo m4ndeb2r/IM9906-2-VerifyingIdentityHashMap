@@ -16,16 +16,6 @@ public class Object {
    /**
     * @generated
     */
-   /*@ public behavior
-     @ requires true;
-     @ ensures true;
-     @ assignable \everything;
-     @*/
-   public Object();
-
-   /**
-    * @generated
-    */
    /*@ protected behavior
      @ requires true;
      @ ensures true;
