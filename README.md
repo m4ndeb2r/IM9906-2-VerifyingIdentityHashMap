@@ -3,8 +3,8 @@ KeY verification case study in which we verify Java's IdentityHashMap with JML a
 
 # Purpose
 Formal analysis of OpenJDK's `IdentityHashMap` (http://hg.openjdk.java.net/jdk7u/jdk7u/jdk/file/4dd5e486620d/src/share/classes/java/util/IdentityHashMap.java).
-This projected is related to the IM9906-IdentityHashMapSpecTester project (see: https://github.com/m4ndeb2r/IM9906-IdentityHashMapSpecTester), providing
-unittests for testing the JML-specs, for example to see if the specified class invariants hold at all time. (TODO: link to another test repo??)
+This projected is related to the IM9906-IdentityHashMapSpecTester project (see: https://github.com/m4ndeb2r/IM9906-2-IdentityHashMapSpecTester), providing
+unittests for testing the JML-specs, for example to see if the specified class invariants hold at all time.
 
 # Setup
 To replicate the setup of the project, follow the steps below:
