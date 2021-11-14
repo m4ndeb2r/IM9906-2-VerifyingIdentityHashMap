@@ -6,7 +6,7 @@ package java.lang;
 public final class Integer extends java.lang.Number implements java.lang.Comparable {
 
    /*+KEY@
-     @ public behavior
+     @ public normal_behavior
      @ requires 
      @   param0 > 0;
      @ ensures
@@ -18,7 +18,7 @@ public final class Integer extends java.lang.Number implements java.lang.Compara
      @     \dl_pow(2,i) == \result); // result is a power of two
      @*/
    /*+OPENJML@
-     @ public behavior
+     @ public normal_behavior
      @ requires 
      @   param0 > 0;
      @ ensures
