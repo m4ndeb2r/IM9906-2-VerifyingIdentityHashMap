@@ -482,8 +482,8 @@ public class VerifiedIdentityHashMap
       @     expectedMaxSize <= MAXIMUM_CAPACITY / (\bigint)3 &&
       @     expectedMaxSize > (\bigint)2 * MINIMUM_CAPACITY / 3;
       @   ensures
-      @     \result >= (((\bigint)3 * expectedMaxSize) / 2) &&
-      @     \result < ((\bigint)3 * expectedMaxSize);
+      @     \result <= ((\bigint)3 * expectedMaxSize) && 
+      @     (\bigint)2 * \result > ((\bigint)3 * expectedMaxSize);
       @   ensures
       @     (\exists \bigint i;
       @       0 <= i < \result;
@@ -508,8 +508,8 @@ public class VerifiedIdentityHashMap
       @     expectedMaxSize <= MAXIMUM_CAPACITY / 3 &&
       @     expectedMaxSize > 2 * MINIMUM_CAPACITY / 3;
       @   ensures
-      @     \result >= ((3 * expectedMaxSize) / 2) &&
-      @     \result < (3 * expectedMaxSize);
+      @     \result <= (3 * expectedMaxSize) && 
+      @     2 * \result > (3 * expectedMaxSize);
       @   ensures
       @     (\result & (\result - 1)) == 0; // result is a power of two
       @*/
