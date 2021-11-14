@@ -777,7 +777,7 @@ public class VerifiedIdentityHashMap
        @         0 <= j < (table.length / 2);
        @         table[j * 2] == maskNull(key));
        @*/
-    public /*@ strictly_pure @*/ boolean containsKey(Object key) {
+    public /*@ strictly_pure @*/ boolean containsKey(/*@ nullable @*/ Object key) {
         Object k =  maskNull(key);
         Object[] tab =  table;
         int len =  tab.length;
@@ -2705,13 +2705,11 @@ public class VerifiedIdentityHashMap
         /*+KEY@
           @ also
           @ public normal_behavior
-          @   requires
-          @     o != null;
           @   ensures
           @     \result == ((o instanceof java.util.Map.Entry) &&
           @       containsMapping(((java.util.Map.Entry)o).getKey(), ((java.util.Map.Entry)o).getValue()));
           @*/
-        public /*@ pure @*/ boolean contains(Object o) {
+        public /*@ pure @*/ boolean contains(/*@ nullable @*/ Object o) {
             if (!(o instanceof Map.Entry))
                 return false;
             Map.Entry entry =  (Map.Entry)o;
