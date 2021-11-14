@@ -934,81 +934,88 @@ public class VerifiedIdentityHashMap
      * @see     #get(Object)
      * @see     #containsKey(Object)
      */
-    /*-KEY@ 
+    /*+KEY@ 
       @ also
-      @ public exceptional_behavior
+      @ private exceptional_behavior
       @   requires
-      @     size + 1 >= threshold &&
-      @     table.length == 2 * MAXIMUM_CAPACITY &&
-      @     threshold == MAXIMUM_CAPACITY - 1;
+      @     size == MAXIMUM_CAPACITY - 1;
+      @   requires
+      @     // The key is not present in the table
+      @     !(\exists \bigint i;
+      @         0 <= i < \old(table.length) / (\bigint)2;
+      @         \old(table[i * 2]) == maskNull(key));
       @   assignable
-      @     size, table[*], modCount;
+      @     \nothing;
       @   signals_only
       @     IllegalStateException;
       @   signals
       @     (IllegalStateException e) true;
-      @
       @ also
       @ public normal_behavior
       @   requires
-      @     !(size + 1 >= threshold &&
-      @     table.length == 2 * MAXIMUM_CAPACITY &&
-      @     threshold == MAXIMUM_CAPACITY - 1);
+      @     // The key is already present in the table
+      @     (\exists \bigint i;
+      @         0 <= i < \old(table.length) / (\bigint)2;
+      @         \old(table[i*2]) == maskNull(key));
+      @   assignable
+      @     table[*];
+      @   ensures
+      @     // The new value is associated with key and
+      @     // the old value associated with key is returned
+      @     (\forall \bigint i;
+      @         0 <= i < \old(table.length) / (\bigint)2;
+      @         \old(table[i * 2]) == maskNull(key) ==>
+      @            (\result == \old(table[i * 2 + 1]) &&
+      @             table[i * 2 + 1] == value));
+      @   ensures
+      @     // After execution, all keys are unchanged and all old values are unchanged
+      @     // except the old value that was associated with key
+      @     (\forall \bigint i;
+      @         0 <= i < \old(table.length) / (\bigint)2;
+      @         (\old(table[i * 2]) == table[i * 2]) &&
+      @         (\old(table[i * 2]) != maskNull(key) ==>
+      @             \old(table[i * 2 + 1]) == table[i * 2 + 1]));
+      @ also
+      @ public normal_behavior
+      @   requires
+      @     size < MAXIMUM_CAPACITY - 1;
+      @   requires
+      @     // The key is not present in the table
+      @     !(\exists \bigint i;
+      @         0 <= i < \old(table.length) / (\bigint)2;
+      @         \old(table[i * 2]) == maskNull(key));
       @   assignable
       @     size, table[*], modCount;
-//      @     size, table[*], threshold, modCount;
       @   ensures
-      @     // If the key already exists, size must not change, modCount must not change,
-      @     // and the old value associated with the key is returned
-      @     ((\exists \bigint i;
-      @         0 <= i < \old(table.length) / (\bigint)2;
-      @         \old(table[i*2]) == maskNull(key))
-      @         ==> size == \old(size) && modCount == \old(modCount) &&
-      @         (\forall \bigint j;
-      @             0 <= j < \old(table.length) / (\bigint)2;
-      @             \old(table[j * 2]) == maskNull(key) ==> \result == \old(table[j * 2 + 1]))) &&
-      @
-      @     // If the key does not exist, size must me increased by 1, modCount must change,
-      @     // and null must be returned
-      @     (!(\exists \bigint i;
-      @         0 <= i < \old(table.length) / (\bigint)2;
-      @         \old(table[i * 2]) == maskNull(key))
-      @         ==> (size == \old(size) + 1) && modCount != \old(modCount) && \result == null) &&
-      @
-      @     // If the key does not exist, and \old(size) + 1) >= \old(threshold), 
-      @     // table must be resized
-      @     (!(\exists \bigint i;
-      @         0 <= i < \old(table.length) / (\bigint)2;
-      @         \old(table[i * 2]) == maskNull(key)) &&
-      @         \old(size) + 1 >= \old(threshold))
-      @         ==>
-      @         ((\old(table.length) == 2 * MAXIMUM_CAPACITY) ==>
-      @            (threshold == MAXIMUM_CAPACITY - 1 && table.length == \old(table.length)) &&
-      @          (\old(table.length) < 2 * MAXIMUM_CAPACITY) ==>
-      @            (threshold == table.length / 3 && table.length == \old(table.length) * 2)) &&
-      @
-      @     // After execution, all old keys are still present
+      @     // size must be increased by 1, modCount must change, and null must be returned
+      @     size == \old(size) + 1 && modCount != \old(modCount) && \result == null;
+//      @   ensures
+//      @     // If the key does not exist, and \old(size) + 1) >= \old(threshold), 
+//      @     // table must be resized
+//      @     (!(\exists \bigint i;
+//      @         0 <= i < \old(table.length) / (\bigint)2;
+//      @         \old(table[i * 2]) == maskNull(key)) &&
+//      @         \old(size) + 1 >= \old(threshold))
+//      @         ==>
+//      @         ((\old(table.length) == 2 * MAXIMUM_CAPACITY) ==>
+//      @            (threshold == MAXIMUM_CAPACITY - 1 && table.length == \old(table.length)) &&
+//      @          (\old(table.length) < 2 * MAXIMUM_CAPACITY) ==>
+//      @            (threshold == table.length / 3 && table.length == \old(table.length) * 2)) &&
+      @   ensures
+      @     // After execution, all old keys are still present and all old values are still present
       @     (\forall \bigint i;
       @         0 <= i < \old(table.length) / (\bigint)2;
       @         (\exists \bigint j;
       @             0 <= j < table.length / (\bigint)2;
-      @             \old(table[i * 2]) == table[j * 2])) &&
-      @
-      @     // After execution, all old values are still present, unless the old value was
-      @     // associated with key
-      @     (\forall \bigint i;
-      @         0 < i < \old(table.length) / (\bigint)2;
-      @         \old(table[i * 2]) != maskNull(key) ==>
-      @             (\exists \bigint j;  
-      @                 0 < j < table.length / (\bigint)2;
-      @                 \old(table[i * 2 + 1]) == table[j * 2 + 1])) &&
-      @
+      @             (\old(table[i * 2]) == table[j * 2]) &&
+      @              \old(table[i * 2 + 1]) == table[j * 2 + 1]));
+      @   ensures
       @     // After execution, the table contains the new key associated with the new value
       @     (\exists \bigint i;
       @         0 <= i < table.length / (\bigint)2;
       @         table[i * 2] == maskNull(key) && table[i * 2 + 1] == value);
       @*/
-    /*+OPENJML@ 
+    /*+OPENJML@ // TODO: update OpenJML
       @ also
       @ public normal_behavior
       @   assignable
@@ -1053,16 +1060,50 @@ public class VerifiedIdentityHashMap
       @         0 <= i < table.length / 2;
       @         table[i*2] == maskNull(key) && table[i*2 + 1] == value);
       @*/
-    public /*@ nullable @*/ java.lang.Object put(java.lang.Object key, java.lang.Object value) {
+    public /*@ nullable @*/ java.lang.Object put(/*@ nullable @*/ java.lang.Object key, /*@ nullable @*/ java.lang.Object value) {
         final Object k =  maskNull(key);
 
-        //+KEY@ // TODO: loop invariant ......
         retryAfterResize: for (;;) {
             final Object[] tab =  table;
             final int len =  tab.length;
             int i =  hash(k, len);
 
-            //+KEY@ // TODO: loop invariant ......
+          //+KEY@ ghost \bigint hash = i;
+        
+          /*+KEY@
+            @ // Index i is always an even value within the array bounds
+            @ maintaining 
+            @   tab == table && len == tab.length &&
+            @   i >= 0 && i < (len - (\bigint)1) && i % (\bigint)2 == 0;
+            @
+            @ // Suppose i > hash. This can only be the case when no key k and no null is present
+            @ // at an even index of tab in the interval [hash..i-2]. 
+            @ maintaining
+            @   (i > hash) ==>
+            @   (\forall \bigint n; hash <= (2 * n) < i; tab[2 * n] != k && tab[2 * n] != null);
+            @ 
+            @ // Suppose i < hash. This can only be the case when no key k and no null is present
+            @ // at an even index of tab in the intervals [0..i-2] and [hash..len-2]. 
+            @ maintaining
+            @   (i < hash) ==>
+            @   (\forall \bigint n; hash <= (2 * n) < len; tab[2 * n] != k && tab[2 * n] != null) &&
+            @   (\forall \bigint m; 0 <= (2 * m) < i; tab[2 * m] != k && tab[2 * m] != null);
+            @
+            @ // Only elements of tab at odd indices can be changed in this loop: 
+            @ // keys (elements at even indices) will not be updated here. 
+            @ maintaining
+            @   (\forall \bigint n; 0 <= n < (len / (\bigint)2); tab[2 * n] == \old(tab[2 * n]));
+            @   
+            @ // If an element of tab at an odd index (an entry's value) changes, the element 
+            @ // at the previous even element (the entry's key) must be equal to k. 
+            @ maintaining
+            @   (\forall \bigint n; 0 <= n < (len / (\bigint)2); 
+            @     tab[2 * n + 1] != \old(tab[2 * n + 1]) ==> tab[2 * n] == k);
+            @   
+            @ decreasing (\bigint)len - ((\bigint)len + i - hash) % (\bigint)len;
+            @ 
+            @ assignable tab[*], i;
+            @*/
             for (Object item; (item = tab[i]) != null;
                  i = nextKeyIndex(i, len)) {
                 if (item == k) {
