@@ -833,7 +833,7 @@ public class VerifiedIdentityHashMap
       @         0 <= j < table.length / (\bigint)2;
       @         table[j * (\bigint)2] != null && table[j * (\bigint)2 + 1] == value);
       @*/
-    public /*@ strictly_pure @*/ boolean containsValue(Object value) {
+    public /*@ strictly_pure @*/ boolean containsValue(/*@ nullable @*/ Object value) {
         Object[] tab =  table;
 
         /*+KEY@
@@ -2577,19 +2577,14 @@ public class VerifiedIdentityHashMap
         }
         /*@ also
           @ public normal_behavior
-          @   requires
-          @     o != null;
           @   ensures
           @     \result == containsValue(o);
           @*/
-        public /*@ strictly_pure @*/ boolean contains(Object o) {
+        public /*@ strictly_pure @*/ boolean contains(/*@ nullable @*/ Object o) {
             return containsValue(o);
         }
         /*@ also
           @ public normal_behavior
-          @   requires
-          @     o != null &&
-          @     contains(o);
           @   ensures
           @     !contains(o) &&
           @     \old(size()) - 1 == size() &&
@@ -2597,15 +2592,12 @@ public class VerifiedIdentityHashMap
           @
           @ also
           @ public normal_behavior
-          @   requires
-          @     o != null &&
-          @     !contains(o);
           @   ensures
           @     !contains(o) &&
           @     \old(size()) == size() &&
           @     \result == false;
           @*/
-        public boolean remove(Object o) {
+        public boolean remove(/*@ nullable @*/ Object o) {
             for (Iterator i =  iterator(); i.hasNext();) {
                 if (i.next() == o) {
                     i.remove();
