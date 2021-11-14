@@ -2449,13 +2449,12 @@ public class VerifiedIdentityHashMap
           @   ensures
           @     \result == containsKey(o);
           @*/
-        public /*@ strictly_pure @*/ boolean contains(Object o) {
+        public /*@ strictly_pure @*/ boolean contains(/*@ nullable @*/Object o) {
             return containsKey(o);
         }
         /*@ also
           @ public normal_behavior
           @   requires
-          @     o != null &&
           @     contains(o);
           @   ensures
           @     !contains(o) &&
@@ -2465,14 +2464,13 @@ public class VerifiedIdentityHashMap
           @ also
           @ public normal_behavior
           @   requires
-          @     o != null &&
           @     !contains(o);
           @   ensures
           @     !contains(o) &&
           @     \old(size()) == size() &&
           @     \result == false;
           @*/
-        public boolean remove(Object o) {
+        public boolean remove(/*@ nullable @*/Object o) {
             int oldSize =  size;
             VerifiedIdentityHashMap.this.remove(o);
             return size != oldSize;
@@ -2585,6 +2583,8 @@ public class VerifiedIdentityHashMap
         }
         /*@ also
           @ public normal_behavior
+          @   requires
+          @     contains(o);
           @   ensures
           @     !contains(o) &&
           @     \old(size()) - 1 == size() &&
@@ -2592,6 +2592,8 @@ public class VerifiedIdentityHashMap
           @
           @ also
           @ public normal_behavior
+          @   requires
+          @     !contains(o);
           @   ensures
           @     !contains(o) &&
           @     \old(size()) == size() &&
