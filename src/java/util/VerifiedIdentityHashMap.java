@@ -135,7 +135,7 @@ package java.util;
 public class VerifiedIdentityHashMap
         extends AbstractMap
         implements Map, java.io.Serializable, Cloneable {
-	
+
     /*+KEY@ // JML specifically for KeY
       @ public invariant
       @   table != null &&
@@ -1166,11 +1166,11 @@ public class VerifiedIdentityHashMap
       @     table.length >= (\bigint)2 * newCapacity &&
       @     newCapacity >= MINIMUM_CAPACITY &&
       @     newCapacity <= (\bigint)2 * MAXIMUM_CAPACITY;
-      @	  
+      @
       @   assignable
       @     \strictly_nothing;
       @
-      @	// Map is unchanged, so return false
+      @ // Map is unchanged, so return false
       @   ensures
       @     \result == false;
       @
@@ -1200,7 +1200,7 @@ public class VerifiedIdentityHashMap
       @         0 <= j < table.length && j % 2 == 0;
       @         \old(table[i]) == table[j] && \old(table[i + 1]) == table[j + 1]));
       @
-      @	// Map is changed, so return true
+      @ // Map is changed, so return true
       @   ensures
       @     \result == true;
       @    
@@ -1976,7 +1976,7 @@ public class VerifiedIdentityHashMap
           @   ;
           @*/
 
-    	/*@ spec_public @*/ int index =  (size != 0 ? 0 : table.length); // current slot.
+        /*@ spec_public @*/ int index =  (size != 0 ? 0 : table.length); // current slot.
         int expectedModCount =  modCount; // to support fast-fail
         /*@ spec_public @*/ int lastReturnedIndex =  -1;      // to allow remove()
         boolean indexValid; // To avoid unnecessary next computation
