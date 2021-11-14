@@ -4,15 +4,30 @@ package java.lang;
  * @generated
  */
 public final class Integer extends java.lang.Number implements java.lang.Comparable {
-   /**
-    * @generated
-    */
-   /*@ public behavior
-     @ requires true;
-     @ ensures true;
-     @ assignable \everything;
+
+   /*+KEY
+     @ public behavior
+     @ requires 
+     @   param0 > 0;
+     @ ensures
+     @   \result <= param0 && 
+     @   (\bigint)2 * \result > param0;
+     @ ensures
+     @   (\exists \bigint i;
+     @     0 <= i < \result;
+     @     \dl_pow(2,i) == \result); // result is a power of two
      @*/
-   public static int highestOneBit(int param0);
+   /*+OPENJML
+     @ public behavior
+     @ requires 
+     @   param0 > 0;
+     @ ensures
+     @   \result <= param0 && 
+     @   2 * \result > param0;
+     @ ensures
+     @   (\result & (\result - 1)) == 0; // result is a power of two
+     @*/
+   public static /*@ strictly_pure @*/ int highestOneBit(int param0);
 
    /**
     * @generated
