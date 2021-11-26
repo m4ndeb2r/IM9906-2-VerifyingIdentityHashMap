@@ -839,14 +839,14 @@ public class VerifiedIdentityHashMap
         /*+KEY@
           @ // Index i is always an odd value within the array bounds
           @ maintaining 
-          @   i >= 1 && i < tab.length && i % (\bigint)2 == 1;
+          @   i >= 1 && i <= tab.length+1 && i % (\bigint)2 == 1;
           @
           @ // There cannot be an odd index n < i containing the value we are looking for (unless
           @ // the associated key is null, in which case the value is ignored). 
           @ maintaining
           @   (\forall \bigint n; 1 <= n < i && n % 2 == 1; tab[n - 1] != null ==> tab[n] != value);
           @ 
-          @ decreasing tab.length - i;
+          @ decreasing tab.length + 1 - i;
           @ 
           @ assignable \strictly_nothing;
           @*/
