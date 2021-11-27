@@ -942,8 +942,8 @@ public class VerifiedIdentityHashMap
       @   requires
       @     // The key is not present in the table
       @     !(\exists \bigint i;
-      @         0 <= i < \old(table.length) / (\bigint)2;
-      @         \old(table[i * 2]) == maskNull(key));
+      @         0 <= i < table.length / (\bigint)2;
+      @         table[i * 2] == maskNull(key));
       @   assignable
       @     \nothing;
       @   signals_only
@@ -955,8 +955,8 @@ public class VerifiedIdentityHashMap
       @   requires
       @     // The key is already present in the table
       @     (\exists \bigint i;
-      @         0 <= i < \old(table.length) / (\bigint)2;
-      @         \old(table[i*2]) == maskNull(key));
+      @         0 <= i < table.length / (\bigint)2;
+      @         table[i*2] == maskNull(key));
       @   assignable
       @     table[*];
       @   ensures
@@ -982,8 +982,8 @@ public class VerifiedIdentityHashMap
       @   requires
       @     // The key is not present in the table
       @     !(\exists \bigint i;
-      @         0 <= i < \old(table.length) / (\bigint)2;
-      @         \old(table[i * 2]) == maskNull(key));
+      @         0 <= i < table.length / (\bigint)2;
+      @         table[i * 2] == maskNull(key));
       @   assignable
       @     size, table[*], modCount;
       @   ensures
