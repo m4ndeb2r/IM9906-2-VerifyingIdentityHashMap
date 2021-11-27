@@ -1102,7 +1102,7 @@ public class VerifiedIdentityHashMap
             @   
             @ decreasing (\bigint)len - ((\bigint)len + i - hash) % (\bigint)len;
             @ 
-            @ assignable tab[*], i;
+            @ assignable tab[0 .. len - (\bigint)1];
             @*/
             for (Object item; (item = tab[i]) != null;
                  i = nextKeyIndex(i, len)) {
@@ -1412,7 +1412,7 @@ public class VerifiedIdentityHashMap
       @     m != null &&
       @     m.size() < (MAXIMUM_CAPACITY);
       @   assignable
-      @     threshold, table, table[*], size, modCount;
+      @     threshold, table, table[0 .. table.length - (\bigint)1], size, modCount;
       @   ensures
       @     size <= \old(size) + m.entrySet().size() &&
       @     (\forall \bigint i;
@@ -1431,7 +1431,7 @@ public class VerifiedIdentityHashMap
       @     m != null &&
       @     m.size() < MAXIMUM_CAPACITY;
       @   assignable
-      @     threshold, table, table[*], size, modCount;
+      @     threshold, table, table[0 .. table.length - (\bigint)1], size, modCount;
       @   ensures
       @     size <= \old(size) + m.entrySet().size(); //&&
 //      @     (\forall int i;
@@ -1487,7 +1487,7 @@ public class VerifiedIdentityHashMap
       @        0 <= i < table.length / 2;
       @        table[i * 2] == maskNull(key));
       @   assignable
-      @     size, table, table[*], modCount;
+      @     size, table, table[0 .. table.length - (\bigint)1], modCount;
       @   ensures
       @     // Size is subtracted by 1
       @     size == \old(size) - 1 &&
@@ -1521,7 +1521,7 @@ public class VerifiedIdentityHashMap
       @        0 <= i < table.length / 2;
       @        table[i * 2] == maskNull(key));
       @   assignable
-      @     size, table, table[*], modCount;
+      @     size, table, table[0 .. table.length - (\bigint)1], modCount;
       @   ensures
       @     // Size is subtracted by 1
       @     size == \old(size) - 1 &&
@@ -1593,7 +1593,7 @@ public class VerifiedIdentityHashMap
       @         0 <= i < table.length / 2;
       @         table[i * 2] == maskNull(key) && table[i * 2 + 1] == value));
       @   assignable
-      @     size, table, table[*], modCount;
+      @     size, table, table[0 .. table.length - (\bigint)1], modCount;
       @   ensures
       @     size == \old(size) - 1 && modCount != \old(modCount) && \result == true &&
       @
@@ -1636,7 +1636,7 @@ public class VerifiedIdentityHashMap
       @         0 <= i < table.length / 2;
       @         table[i * 2] == maskNull(key) && table[i * 2 + 1] == value));
       @   assignable
-      @     size, table, table[*], modCount;
+      @     size, table, table[0 .. table.length - (\bigint)1], modCount;
       @   ensures
       @     size == \old(size) - 1 && modCount != \old(modCount) && \result == true &&
       @
@@ -1787,7 +1787,7 @@ public class VerifiedIdentityHashMap
       @ also
       @ public normal_behavior
       @   assignable
-      @     modCount, size, table[*];
+      @     modCount, size, table[0 .. table.length - (\bigint)1];
       @   ensures
       @     \old(modCount) != modCount &&
       @     \old(table.length) == table.length &&
@@ -1800,7 +1800,7 @@ public class VerifiedIdentityHashMap
       @ also
       @ public normal_behavior
       @   assignable
-      @     modCount, size, table[*];
+      @     modCount, size, table[0 .. table.length - (\bigint)1];
       @   ensures
       @     \old(modCount) != modCount &&
       @     \old(table.length) == table.length &&
@@ -1821,7 +1821,7 @@ public class VerifiedIdentityHashMap
           @ decreasing
           @   tab.length - i;
           @ assignable
-          @   table[*];
+          @   tab[0 .. tab.length - (\bigint)1];
           @*/
         for (int i =  0; i < tab.length; i++)
             tab[i] = null;
