@@ -1107,7 +1107,7 @@ public class VerifiedIdentityHashMap
             for (Object item; (item = tab[i]) != null;
                  i = nextKeyIndex(i, len)) {
                 if (item == k) {
-                    @SuppressWarnings("unchecked") java.lang.Object oldValue =  (java.lang.Object) tab[i + 1];
+                    java.lang.Object oldValue =  (java.lang.Object) tab[i + 1];
                     tab[i + 1] = value;
                     return oldValue;
                 }
