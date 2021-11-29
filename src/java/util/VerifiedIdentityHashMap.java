@@ -1100,7 +1100,7 @@ public class VerifiedIdentityHashMap
             @   (\forall \bigint n; 0 <= n < (len / (\bigint)2); 
             @     tab[2 * n + 1] != \old(tab[2 * n + 1]) ==> tab[2 * n] == k);
             @   
-            @ decreasing (\bigint)len - ((\bigint)len + i - hash) % (\bigint)len;
+            @ decreasing hash > i ? hash - i : len + hash - i;
             @ 
             @ assignable tab[0 .. len - (\bigint)1];
             @*/
