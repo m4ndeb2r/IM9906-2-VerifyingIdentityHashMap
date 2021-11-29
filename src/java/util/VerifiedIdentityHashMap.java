@@ -1089,16 +1089,11 @@ public class VerifiedIdentityHashMap
             @   (\forall \bigint n; hash <= (2 * n) < len; tab[2 * n] != k && tab[2 * n] != null) &&
             @   (\forall \bigint m; 0 <= (2 * m) < i; tab[2 * m] != k && tab[2 * m] != null);
             @
-            @ // Only elements of tab at odd indices can be changed in this loop: 
-            @ // keys (elements at even indices) will not be updated here. 
+            @ // if the loop iteration completes, no elements of tab are changed 
+            @ // in case key is present, the associated value is updated and the loop iteration
+            @ // terminates without completing because the method returns
             @ maintaining
-            @   (\forall \bigint n; 0 <= n < (len / (\bigint)2); tab[2 * n] == \old(tab[2 * n]));
-            @   
-            @ // If an element of tab at an odd index (an entry's value) changes, the element 
-            @ // at the previous even element (the entry's key) must be equal to k. 
-            @ maintaining
-            @   (\forall \bigint n; 0 <= n < (len / (\bigint)2); 
-            @     tab[2 * n + 1] != \old(tab[2 * n + 1]) ==> tab[2 * n] == k);
+            @   (\forall \bigint n; 0 <= n < len; tab[n] == \old(tab[n]));
             @   
             @ decreasing hash > i ? hash - i : len + hash - i;
             @ 
