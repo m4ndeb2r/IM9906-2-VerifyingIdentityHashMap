@@ -694,24 +694,53 @@ public class VerifiedIdentityHashMap
      * distinguish these two cases.
      *
      * @see #put(Object, Object)
-     */@SuppressWarnings("unchecked")
-     /*@ also
-       @ public normal_behavior
-       @   ensures
-       @     \result != null <==>
-       @         (\exists \bigint i;
-       @             0 <= i < table.length / (\bigint)2;
-       @             table[i * 2] == maskNull(key) && \result == table[i * 2 + 1]);
-       @   ensures
-       @     \result == null <==>
-       @         (!(\exists \bigint i;
-       @             0 <= i < table.length / (\bigint)2;
-       @             table[i * 2] == maskNull(key)) ||
-       @         (\exists \bigint i;
-       @             0 <= i < table.length / (\bigint)2;
-       @             table[i * 2] == maskNull(key) && table[i * 2 + 1] == null)
-       @         );
-       @*/
+     */
+    /*+KEY@ 
+      @ // Key exists
+      @ also
+      @ public normal_behavior
+      @   requires
+      @     (\exists \bigint i;
+      @       0 <= i < table.length / (\bigint)2;
+      @       table[i * 2] == maskNull(key));
+      @   ensures
+      @     (\exists \bigint i;
+      @        0 <= i < table.length / (\bigint)2;
+      @        table[i * 2] == maskNull(key) && \result == table[i * 2 + 1]);
+      @      
+      @ // Key does not exist       
+      @ also
+      @ public normal_behavior
+      @   requires
+      @     !(\exists \bigint i;
+      @       0 <= i < table.length / (\bigint)2;
+      @       table[i * 2] == maskNull(key));
+      @   ensures
+      @     \result == null;
+      @*/
+    /*+OPENJML@ 
+      @ // Key exists
+      @ also
+      @ public normal_behavior
+      @   requires
+      @     (\exists int i;
+      @       0 <= i < table.length / 2;
+      @       table[i * 2] == maskNull(key));
+      @   ensures
+      @     (\exists int i;
+      @        0 <= i < table.length / 2;
+      @        table[i * 2] == maskNull(key) && \result == table[i * 2 + 1]);
+      @      
+      @ // Key does not exist       
+      @ also
+      @ public normal_behavior
+      @   requires
+      @     !(\exists int i;
+      @       0 <= i < table.length / 2;
+      @       table[i * 2] == maskNull(key));
+      @   ensures
+      @     \result == null;
+      @*/
      public /*@ pure nullable @*/ java.lang.Object get(/*@ nullable @*/ Object key) {
         Object k =  maskNull(key);
         Object[] tab =  table;
