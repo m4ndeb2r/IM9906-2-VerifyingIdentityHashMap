@@ -991,11 +991,11 @@ public class VerifiedIdentityHashMap
       @   ensures
       @     // The new value is associated with key and
       @     // the old value associated with key is returned
-      @     (\forall \bigint i;
-      @         0 <= i < \old(table.length) / (\bigint)2;
-      @         \old(table[i * 2]) == maskNull(key) ==>
-      @            (\result == \old(table[i * 2 + 1]) &&
-      @             table[i * 2 + 1] == value));
+      @     (\exists \bigint i;
+      @         0 <= i < table.length / (\bigint)2;
+      @         table[i*2] == maskNull(key) &&
+      @         \result == \old(table[i * 2 + 1]) &&
+      @         table[i * 2 + 1] == value);
       @   ensures
       @     // After execution, all keys are unchanged and all old values are unchanged
       @     // except the old value that was associated with key
@@ -1118,15 +1118,12 @@ public class VerifiedIdentityHashMap
             @   (\forall \bigint n; hash <= (2 * n) < len; tab[2 * n] != k && tab[2 * n] != null) &&
             @   (\forall \bigint m; 0 <= (2 * m) < i; tab[2 * m] != k && tab[2 * m] != null);
             @
-            @ // if the loop iteration completes, no elements of tab are changed 
-            @ // in case key is present, the associated value is updated and the loop iteration
-            @ // terminates without completing because the method returns
-            @ maintaining
-            @   (\forall \bigint n; 0 <= n < len; tab[n] == \old(tab[n]));
-            @   
             @ decreasing hash > i ? hash - i : len + hash - i;
-            @ 
-            @ assignable tab[0 .. len - (\bigint)1];
+            @
+            @ // if the loop iteration completes, the heap is unchanged 
+            @ // in case key is present, table is updated but the loop iteration terminates without
+            @ // completing because the method returns, so the assignable clause need not hold
+            @ assignable \strictly_nothing;
             @*/
             for (Object item; (item = tab[i]) != null;
                  i = nextKeyIndex(i, len)) {
