@@ -1018,18 +1018,6 @@ public class VerifiedIdentityHashMap
       @   ensures
       @     // size must be increased by 1, modCount must change, and null must be returned
       @     size == \old(size) + 1 && modCount != \old(modCount) && \result == null;
-//      @   ensures
-//      @     // If the key does not exist, and \old(size) + 1) >= \old(threshold), 
-//      @     // table must be resized
-//      @     (!(\exists \bigint i;
-//      @         0 <= i < \old(table.length) / (\bigint)2;
-//      @         \old(table[i * 2]) == maskNull(key)) &&
-//      @         \old(size) + 1 >= \old(threshold))
-//      @         ==>
-//      @         ((\old(table.length) == 2 * MAXIMUM_CAPACITY) ==>
-//      @            (threshold == MAXIMUM_CAPACITY - 1 && table.length == \old(table.length)) &&
-//      @          (\old(table.length) < 2 * MAXIMUM_CAPACITY) ==>
-//      @            (threshold == table.length / 3 && table.length == \old(table.length) * 2)) &&
       @   ensures
       @     // After execution, all old keys are still present and all old values are still present
       @     (\forall \bigint i;
@@ -1283,14 +1271,6 @@ public class VerifiedIdentityHashMap
           @     (\exists \bigint m;
           @         0 <= m < j && m % 2 == 0;
           @         newTable[n] == \old(table[m]) && newTable[n + 1] == \old(table[m + 1])));
-          @
-//          @ // All entries in newTable are also present in \old(table)
-//          @ maintaining 
-//          @   (\forall \bigint n;
-//          @     0 <= n < newTable.length && n % 2 == 0;
-//          @     (\exists \bigint m;
-//          @         0 <= m < \old(table.length) && m % 2 == 0;
-//          @         newTable[n] == \old(table[m]) && newTable[n + 1] == \old(table[m + 1])));
           @
           @ // All unprocessed entries are still untouched in old table
           @ maintaining 
