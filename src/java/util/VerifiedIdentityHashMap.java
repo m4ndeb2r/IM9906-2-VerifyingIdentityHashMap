@@ -1179,8 +1179,8 @@ public class VerifiedIdentityHashMap
       @   assignable
       @     \strictly_nothing;
       @
-      @ // Map is unchanged, so return false
       @   ensures
+      @     // Map is unchanged, so return false
       @     \result == false;
       @
       @
@@ -1209,8 +1209,8 @@ public class VerifiedIdentityHashMap
       @         0 <= j < table.length && j % 2 == 0;
       @         \old(table[i]) == table[j] && \old(table[i + 1]) == table[j + 1]));
       @
-      @ // Map is changed, so return true
       @   ensures
+      @     // Map is changed, so return true
       @     \result == true;
       @
       @   ensures
