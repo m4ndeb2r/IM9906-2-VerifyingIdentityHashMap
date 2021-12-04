@@ -1212,6 +1212,9 @@ public class VerifiedIdentityHashMap
       @ // Map is changed, so return true
       @   ensures
       @     \result == true;
+      @
+      @   ensures
+      @     \fresh(table);
       @    
       @*/
     /*+OPENJML@ 
