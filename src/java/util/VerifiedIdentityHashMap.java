@@ -1215,7 +1215,14 @@ public class VerifiedIdentityHashMap
       @
       @   ensures
       @     \fresh(table);
-      @    
+      @
+      @   ensures 
+      @     // All entries in the new table were also present in \old(table)
+      @     (\forall \bigint n;
+      @       0 <= n < table.length / (\bigint)2;
+      @       (\exists \bigint m;
+      @         0 <= m < \old(table.length) / (\bigint)2;
+      @         table[2*n] == \old(table[2*m]) && table[2*n + 1] == \old(table[2*m + 1])));
       @*/
     /*+OPENJML@ 
       @ // TODO
