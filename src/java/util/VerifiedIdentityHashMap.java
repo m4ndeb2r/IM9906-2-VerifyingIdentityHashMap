@@ -1014,7 +1014,7 @@ public class VerifiedIdentityHashMap
       @         0 <= i < table.length / (\bigint)2;
       @         table[i * 2] == maskNull(key));
       @   assignable
-      @     size, table[*], modCount;
+      @     size, table[*], modCount, table;
       @   ensures
       @     // size must be increased by 1, modCount must change, and null must be returned
       @     size == \old(size) + 1 && modCount != \old(modCount) && \result == null;
