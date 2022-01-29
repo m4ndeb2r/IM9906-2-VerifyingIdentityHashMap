@@ -747,7 +747,7 @@ public class VerifiedIdentityHashMap
         int len =  tab.length;
         int i =  hash(k, len);
 
-        //+KEY@ ghost int hash = i;
+        //+KEY@ ghost \bigint hash = i;
 
         /*+KEY@
           @ // Index i is always an even value within the array bounds
@@ -770,7 +770,7 @@ public class VerifiedIdentityHashMap
           @ decreasing hash > i ? hash - i : hash + len - i;
           @ 
           @ assignable \strictly_nothing;
-          @*/        
+          @*/
         while (true) {
             Object item =  tab[i];
             if (item == k)
