@@ -209,15 +209,6 @@ public class VerifiedIdentityHashMap
       @ public invariant
       @   \dl_inInt(modCount);
       @
-//      @ // Bounds on size in relation to threshold
-//      @ public invariant
-//      @   (size <= threshold) &&
-//      @   (size == threshold ==> size == MAXIMUM_CAPACITY - 1);
-//      @
-//      @ // Bounds on threshold in relation to table.length and MAXIMUM_CAPACITY
-//      @ public invariant
-//      @   (threshold == table.length / 3 || threshold == MAXIMUM_CAPACITY - 1) &&
-//      @   (table.length < 2 * MAXIMUM_CAPACITY ==> threshold == table.length / 3);
       @*/
     /*+OPENJML@ // JML for non-KeY tools, i.e. JJBMC
       @ public invariant
@@ -281,16 +272,6 @@ public class VerifiedIdentityHashMap
 //      @ // Integer.MIN_VALUE and Integer.MAX_VALUE)
 //      @ public invariant
 //      @   \dl_inInt(modCount);
-//      @
-//      @ // Bounds on size in relation to threshold
-//      @ public invariant
-//      @   (size <= threshold) &&
-//      @   (size == threshold ==> size == MAXIMUM_CAPACITY - 1);
-//      @
-//      @ // Bounds on threshold in relation to table.length and MAXIMUM_CAPACITY
-//      @ public invariant
-//      @   (threshold == table.length / 3 || threshold == MAXIMUM_CAPACITY - 1) &&
-//      @   (table.length < 2 * MAXIMUM_CAPACITY ==> threshold == table.length / 3);
       @*/
 
     /**
@@ -379,7 +360,6 @@ public class VerifiedIdentityHashMap
       @     values == null &&
       @     entrySet == null &&
       @     modCount == 0 &&
-//      @     threshold == (DEFAULT_CAPACITY * (\bigint)2) / (\bigint)3 &&
       @     size == 0 &&
       @     (\forall \bigint i; 0 <= i && i < table.length; table[i] == null); 
       @*/
@@ -392,7 +372,6 @@ public class VerifiedIdentityHashMap
       @     values == null &&
       @     entrySet == null &&
       @     modCount == 0 &&
-//      @     threshold == (DEFAULT_CAPACITY * 2) / 3 &&
       @     size == 0 &&
       @     (\forall int i; 0 <= i && i < table.length; table[i] == null); 
       @*/
@@ -430,7 +409,6 @@ public class VerifiedIdentityHashMap
       @     values == null &&
       @     entrySet == null &&
       @     modCount == 0 &&
-//      @     threshold == (capacity(expectedMaxSize) * (\bigint)2) / (\bigint)3 &&
       @     size == 0 &&
       @     (\forall \bigint i; 0 <= i && i < table.length; table[i] == null);
       @*/
@@ -445,7 +423,6 @@ public class VerifiedIdentityHashMap
       @     values == null &&
       @     entrySet == null &&
       @     modCount == 0 &&
-//      @     threshold == (capacity(expectedMaxSize) * 2) / 3 &&
       @     size == 0 &&
       @     (\forall \bigint i; 0 <= i && i < table.length; table[i] == null);
       @*/
@@ -535,12 +512,10 @@ public class VerifiedIdentityHashMap
       @     \dl_inInt(modCount);
       @   assignable
       @     table;
-//      @     table, threshold;
       @   ensures
       @     table != null &&
       @     \typeof(table) == \type(Object[]) &&
       @     (\forall \bigint i; 0 <= i < table.length; table[i] == null) &&
-//      @     threshold == ((\bigint)2 * initCapacity) / (\bigint)3 &&
       @     table.length == (\bigint)2 * initCapacity;
       @*/
     /*+OPENJML@ 
@@ -551,11 +526,9 @@ public class VerifiedIdentityHashMap
       @     initCapacity <= MAXIMUM_CAPACITY;
       @   assignable
       @     table;
-//      @     table, threshold;
       @   ensures
       @     table != null &&
       @     (\forall int i; 0 <= i < table.length; table[i] == null) &&
-//      @     threshold == (2 * initCapacity) / 3 &&
       @     table.length == 2 * initCapacity;
       @*/
     private /*@ helper @*/ void init(int initCapacity) {
@@ -1037,7 +1010,6 @@ public class VerifiedIdentityHashMap
       @ public normal_behavior
       @   assignable
       @     size, table[*], modCount;
-//      @     size, table[*], threshold, modCount;
       @   ensures
 //    @     // If the key already exists, size must not change, modCount must not change,
 //    @     // and the old value associated with the key is returned
@@ -1728,7 +1700,6 @@ public class VerifiedIdentityHashMap
       @   requires true;
       @   ensures
       @     size == \old(size) &&
-//      @     threshold == \old(threshold) &&
       @     table.length == \old(table.length )&&
       @     
       @     // All elements are still present
@@ -1746,7 +1717,6 @@ public class VerifiedIdentityHashMap
       @   requires true;
       @   ensures
       @     size == \old(size) &&
-//      @     threshold == \old(threshold) &&
       @     table.length == \old(table.length )&&
       @     
       @     // All elements are still present
@@ -1942,7 +1912,6 @@ public class VerifiedIdentityHashMap
       @ private normal_behavior
       @   ensures
       @     ((VerifiedIdentityHashMap)\result).size == size &&
-//      @     ((VerifiedIdentityHashMap)\result).threshold == threshold &&
       @     ((VerifiedIdentityHashMap)\result).entrySet == null &&
       @     ((VerifiedIdentityHashMap)\result).values == null &&
       @     ((VerifiedIdentityHashMap)\result).keySet == null &&
@@ -1955,7 +1924,6 @@ public class VerifiedIdentityHashMap
       @ private normal_behavior
       @   ensures
       @     ((VerifiedIdentityHashMap)\result).size == size &&
-//      @     ((VerifiedIdentityHashMap)\result).threshold == threshold &&
       @     ((VerifiedIdentityHashMap)\result).entrySet == null &&
       @     ((VerifiedIdentityHashMap)\result).values == null &&
       @     ((VerifiedIdentityHashMap)\result).keySet == null &&
