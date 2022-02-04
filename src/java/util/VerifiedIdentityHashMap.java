@@ -161,8 +161,6 @@ public class VerifiedIdentityHashMap
       @       0 <= i < table.length / (\bigint)2;
       @       table[2 * i] != null);
       @
-      @ // TODO: add 'size <= table.lenght / (\bigint) 2  - 1???? 
-      @
       @ // Table length is a power of two
       @ public invariant
       @   (\exists \bigint i;
@@ -229,6 +227,12 @@ public class VerifiedIdentityHashMap
       @       i <= j && j < table.length / 2;
       @       (table[2*i] != null && table[2*i] == table[2*j]) ==> i == j));
       @
+//      @ // Size equals the number of non-empty keys in the table
+//      @ public invariant
+//      @   size == (\num_of int i;
+//      @       0 <= i < table.length / 2;
+//      @       table[2 * i] != null);
+//      @
       @ // Table length is a power of two
       @ public invariant
       @   (table.length & (table.length - 1)) == 0;
@@ -424,7 +428,7 @@ public class VerifiedIdentityHashMap
       @     entrySet == null &&
       @     modCount == 0 &&
       @     size == 0 &&
-      @     (\forall \bigint i; 0 <= i && i < table.length; table[i] == null);
+      @     (\forall int i; 0 <= i && i < table.length; table[i] == null);
       @*/
     public VerifiedIdentityHashMap(int expectedMaxSize) {
         if (expectedMaxSize < 0)
@@ -1005,49 +1009,59 @@ public class VerifiedIdentityHashMap
       @         0 <= i < table.length / (\bigint)2;
       @         table[i * 2] == maskNull(key) && table[i * 2 + 1] == value);
       @*/
-    /*+OPENJML@ // TODO: update OpenJML
+    /*+OPENJML@ 
       @ also
       @ public normal_behavior
+      @   requires
+      @     // The key is already present in the table
+      @     (\exists int i;
+      @         0 <= i < table.length / 2;
+      @         table[i*2] == maskNull(key));
       @   assignable
-      @     size, table[*], modCount;
+      @     table[*];
       @   ensures
-//    @     // If the key already exists, size must not change, modCount must not change,
-//    @     // and the old value associated with the key is returned
-//    @     ((\exists int i;
-//    @         0 <= i < \old(table.length) - 1;
-//    @         \old(table[i*2]) == maskNull(key))
-//    @         ==> size == \old(size) && modCount == \old(modCount) &&
-//    @         (\forall int j;
-//    @             0 <= j < \old(table.length) - 1 && j % 2 == 0;
-//    @             \old(table[j]) == maskNull(key) ==> \result == \old(table[j + 1]))) &&
-//    @
-//    @     // If the key does not exist, size must me increased by 1, modCount must change,
-//    @     // and null must be returned
-//    @     (!(\exists int i;
-//    @         0 <= i < \old(table.length) - 1;
-//    @         i % 2 == 0 && \old(table[i]) == maskNull(key))
-//    @         ==> (size == \old(size) + 1) && modCount != \old(modCount) && \result == null) &&
-//    @
-//    @     // After execution, all old keys are still present
-//    @     (\forall int i;
-//    @         0 <= i < \old(table.length) && i % 2 == 0;
-//    @         (\exists int j;
-//    @             0 <= j < table.length;
-//    @             j % 2 == 0 && \old(table[i]) == table[j])) &&
-//    @
-//    @     // After execution, all old values are still present, unless the old value was
-//    @     // associated with key
-//    @     (\forall int i;
-//    @         0 < i < \old(table.length) && i % 2 == 1;
-//    @         \old(table[i-1]) != maskNull(key) ==>
-//    @             (\exists int j;
-//    @                 0 < j < table.length;
-//    @                 j % 2 == 1 && \old(table[i]) == table[j])) &&
-//    @
+      @     // The new value is associated with key and
+      @     // the old value associated with key is returned
+      @     (\exists int i;
+      @         0 <= i < table.length / 2;
+      @         table[i*2] == maskNull(key) &&
+      @         \result == \old(table[i * 2 + 1]) &&
+      @         table[i * 2 + 1] == value);
+      @   ensures
+      @     // After execution, all keys are unchanged and all old values are unchanged
+      @     // except the old value that was associated with key
+      @     (\forall int i;
+      @         0 <= i < \old(table.length) / 2;
+      @         (\old(table[i * 2]) == table[i * 2]) &&
+      @         (\old(table[i * 2]) != maskNull(key) ==>
+      @             \old(table[i * 2 + 1]) == table[i * 2 + 1]));
+      @ also
+      @ public normal_behavior
+      @   requires
+      @     size < MAXIMUM_CAPACITY - 1;
+      @   requires
+      @     // The key is not present in the table
+      @     !(\exists int i;
+      @         0 <= i < table.length / 2;
+      @         table[i * 2] == maskNull(key));
+      @   assignable
+      @     size, table[*], modCount, table;
+      @   ensures
+      @     // size must be increased by 1, modCount must change, and null must be returned
+      @     size == \old(size) + 1 && modCount != \old(modCount) && \result == null;
+      @   ensures
+      @     // After execution, all old keys are still present and all old values are still present
+      @     (\forall int i;
+      @         0 <= i < \old(table.length) / 2;
+      @         (\exists int j;
+      @             0 <= j < table.length / 2;
+      @             (\old(table[i * 2]) == table[j * 2]) &&
+      @              \old(table[i * 2 + 1]) == table[j * 2 + 1]));
+      @   ensures
       @     // After execution, the table contains the new key associated with the new value
       @     (\exists int i;
       @         0 <= i < table.length / 2;
-      @         table[i*2] == maskNull(key) && table[i*2 + 1] == value);
+      @         table[i * 2] == maskNull(key) && table[i * 2 + 1] == value);
       @*/
     public /*@ nullable @*/ java.lang.Object put(/*@ nullable @*/ java.lang.Object key, /*@ nullable @*/ java.lang.Object value) {
         final Object k =  maskNull(key);
@@ -1197,28 +1211,73 @@ public class VerifiedIdentityHashMap
       @         table[2*n] == \old(table[2*m]) && table[2*n + 1] == \old(table[2*m + 1])));
       @*/
     /*+OPENJML@ 
-      @ // TODO
+      @ // Nothing changes if table.length == 2 * MAXIMUM_CAPACITY &&
+      @ // size < MAXIMUM_CAPACITY - 1.
       @ private normal_behavior
       @   requires
-      @     (newCapacity & (newCapacity - 1)) == 0 &&
-      @     table.length < 2 * MAXIMUM_CAPACITY &&
-      @     threshold < MAXIMUM_CAPACITY - 1;
+      @     table.length == 2 * MAXIMUM_CAPACITY &&
+      @     size < MAXIMUM_CAPACITY - 1;
       @   assignable
-      @     threshold, table, table[*];
+      @     \strictly_nothing;
       @   ensures
-      @     \old(table.length) == 2 * MAXIMUM_CAPACITY ==>
-      @       (threshold == MAXIMUM_CAPACITY - 1 && table.length == \old(table.length)) &&
-      @     (\old(table.length) != 2 * MAXIMUM_CAPACITY && \old(table.length) >= (newCapacity * 2)) ==>
-      @       table.length == \old(table.length) &&
-      @     (\old(table.length) != 2 * MAXIMUM_CAPACITY && \old(table.length) < (newCapacity * 2)) ==>
-      @       table.length == (newCapacity * 2);
+      @     \result == false;
+      @
+      @ // Nothing changes when table.length < 2 * MAXIMUM_CAPACITY &&
+      @ // table.length >= 2 * newCapacity.
+      @ private normal_behavior
+      @   requires
+      @     table.length < 2 * MAXIMUM_CAPACITY &&
+      @     table.length >= 2 * newCapacity &&
+      @     newCapacity >= MINIMUM_CAPACITY &&
+      @     newCapacity <= 2 * MAXIMUM_CAPACITY;
+      @
+      @   assignable
+      @     \strictly_nothing;
+      @
+      @   ensures
+      @     // Map is unchanged, so return false
+      @     \result == false;
+      @
+      @
+      @ // If we actually resize (table.length < 2 * MAXIMUM_CAPACITY && table.length < 2 * newCapacity)
+      @ // then rehash the table with the new length to re-establish the class invariant.
+      @ private normal_behavior
+      @   requires
+      @     table.length < 2 * newCapacity &&
+      @     newCapacity <= MAXIMUM_CAPACITY &&
+      @     newCapacity >= MINIMUM_CAPACITY &&
+      @     (\exists int i;
+      @       0 <= i < newCapacity;
+      @       (newCapacity & (newCapacity - 1)) == 0;
+      @
+      @   assignable
+      @     table, table[*];
+      @
+      @   ensures
+      @     table.length == (newCapacity * 2);
+      @
       @   ensures
       @     // After execution, all old entries are still present
       @     (\forall int i;
-      @       0 <= i < \old(table.length) / 2;
+      @       0 <= i < \old(table.length) && i % 2 == 0;
       @       (\exists int j;
-      @         0 <= j < table.length / 2;
-      @         \old(table[i * 2]) == table[j * 2] && \old(table[i * 2 + 1]) == table[j * 2 + 1]));
+      @         0 <= j < table.length && j % 2 == 0;
+      @         \old(table[i]) == table[j] && \old(table[i + 1]) == table[j + 1]));
+      @
+      @   ensures
+      @     // Map is changed, so return true
+      @     \result == true;
+      @
+      @   ensures
+      @     \fresh(table);
+      @
+      @   ensures 
+      @     // All entries in the new table were also present in \old(table)
+      @     (\forall int n;
+      @       0 <= n < table.length / 2;
+      @       (\exists int m;
+      @         0 <= m < \old(table.length) / 2;
+      @         table[2*n] == \old(table[2*m]) && table[2*n + 1] == \old(table[2*m + 1])));
       @*/
     private boolean resize(int newCapacity)
         // assert (newCapacity & -newCapacity) == newCapacity; // power of 2
@@ -1781,7 +1840,7 @@ public class VerifiedIdentityHashMap
       @ also
       @ public normal_behavior
       @   assignable
-      @     modCount, size, table[0 .. table.length - (\bigint)1];
+      @     modCount, size, table[0 .. table.length - 1];
       @   ensures
       @     \old(modCount) != modCount &&
       @     \old(table.length) == table.length &&
