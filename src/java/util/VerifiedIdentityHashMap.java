@@ -210,7 +210,7 @@ public class VerifiedIdentityHashMap
       @*/
     /*+OPENJML@ // JML for non-KeY tools, i.e. JJBMC
       @ public invariant
-      @   table != null &&
+      @   table != null; // &&
       @   //MINIMUM_CAPACITY * 2 <= table.length  && // is no longer valid as we set min and max to 4
       @   //MAXIMUM_CAPACITY * 2 >= table.length;
       @
@@ -356,7 +356,7 @@ public class VerifiedIdentityHashMap
      * maximum size (21).
      */
     /*+KEY@ 
-      @ public normal_behavior
+      @ private normal_behavior
       @   ensures
       @     table != null &&
       @     table.length == (\bigint)2 * DEFAULT_CAPACITY &&
@@ -368,7 +368,7 @@ public class VerifiedIdentityHashMap
       @     (\forall \bigint i; 0 <= i && i < table.length; table[i] == null); 
       @*/
     /*+OPENJML@ 
-      @ public normal_behavior
+      @ private normal_behavior
       @   ensures
       @     table != null &&
       @     table.length == 2 * DEFAULT_CAPACITY &&
@@ -755,12 +755,21 @@ public class VerifiedIdentityHashMap
      *         specified object reference
      * @see     #containsKey(Object)
      */
-    /*@ also
+    /*+KEY@ 
+      @ also
       @ public normal_behavior
       @   ensures
       @     \result <==> (\exists \bigint j;
       @         0 <= j < table.length / (\bigint)2;
       @         table[j * (\bigint)2] != null && table[j * (\bigint)2 + 1] == value);
+      @*/
+    /*+OPEN_JML@ 
+      @ also
+      @ public normal_behavior
+      @   ensures
+      @     \result <==> (\exists int j;
+      @         0 <= j < table.length / 2;
+      @         table[j * 2] != null && table[j * 2 + 1] == value);
       @*/
     public /*@ strictly_pure @*/ boolean containsValue(/*@ nullable @*/ Object value) {
         Object[] tab =  table;
@@ -1171,7 +1180,7 @@ public class VerifiedIdentityHashMap
       @     newCapacity >= MINIMUM_CAPACITY &&
       @     (\exists int i;
       @       0 <= i < newCapacity;
-      @       (newCapacity & (newCapacity - 1)) == 0;
+      @       (newCapacity & (newCapacity - 1)) == 0);
       @
       @   assignable
       @     table, table[*];
