@@ -1,8 +1,40 @@
 # IM9906-2-VerifyingIdentityHashMap
-KeY verification case study in which we verify Java's IdentityHashMap with JML and KeY.
+Deductive verification case study in which we formally verify [Java's
+`IdentityHashMap`](http://hg.openjdk.java.net/jdk7u/jdk7u/jdk/file/4dd5e486620d/src/share/classes/java/util/IdentityHashMap.java).
+We used [JML](https://www.cs.ucf.edu/~leavens/JML/index.shtml) for
+formal specification and [KeY](https://www-key-project.org) as
+interactive theorem prover.  We used
+[JJBMC](https://github.com/JonasKlamroth/JJBMC) and
+[JUnit](https://junit.org) to gain confidence while engineering the
+specification.
+
+## The specified sources
+
+The specified source code can be found in XXXXX in the repository.
+
+# Publication
+
+A report on the case study is currently under review.
+
+## Deviations
+
+The specifications in this repository deviate in a few minor details
+from the specification shown in paper (which were simplified for
+presentation purposes):
+1. The verified code contains a few spurious cast of the form
+   `(java.lang.Object)x` which were an artifact from the removal of
+   the generics.
+2. Some methods carry the modifier `pure`. In the paper this is
+   specified as the (semantically equivalent) clause `assignable
+   \nothing;`
+3. Many JML clauses begine either `/*+KEY@` or `/*+OPENJML@` to
+   indicate that they are meant for the KeY tool or for JJBMC. The
+   tools have slightly different syntaxes and sets of supported
+   constructs.
+
 
 # Purpose
-Formal analysis of OpenJDK's `IdentityHashMap` (http://hg.openjdk.java.net/jdk7u/jdk7u/jdk/file/4dd5e486620d/src/share/classes/java/util/IdentityHashMap.java).
+Formal analysis of OpenJDK's [`IdentityHashMap`](http://hg.openjdk.java.net/jdk7u/jdk7u/jdk/file/4dd5e486620d/src/share/classes/java/util/IdentityHashMap.java).
 This projected is related to the IM9906-IdentityHashMapSpecTester project (see: https://github.com/m4ndeb2r/IM9906-2-IdentityHashMapSpecTester), providing
 unittests for testing the JML-specs, for example to see if the specified class invariants hold at all time.
 
