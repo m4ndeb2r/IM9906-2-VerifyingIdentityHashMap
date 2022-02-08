@@ -8,10 +8,6 @@ interactive theorem prover.  We used
 [JUnit](https://junit.org) to gain confidence while engineering the
 specification.
 
-## The specified sources
-
-The specified source code can be found in XXXXX in the repository.
-
 # Publication
 
 A report on the case study is currently under review.
