@@ -55,7 +55,7 @@ Create a new KeY-project. In the menu, choose:
 In your new (empty) KeY project, follow these steps:
 * create a package `java.util` in your src directory,
 * in this package, create a new (empty) class named `VerifiedIdentityHashMap`,
-* copy the sourcecode from [http://hg.openjdk.java.net/jdk7/jdk7/jdk/file/9b8c96f96a0f/src/share/classes/java/util/IdentityHashMap.java] and paste it into your newly created class,
+* copy the sourcecode from [http://hg.openjdk.java.net/jdk7u/jdk7u/jdk/file/4dd5e486620d/src/share/classes/java/util/IdentityHashMap.java] and paste it into your newly created class,
 * replace all occurences of the string `IdentityHashMap` in the file with `VerifiedIdentityHashMap` to match the filename of the class,
 * save the class.
 
