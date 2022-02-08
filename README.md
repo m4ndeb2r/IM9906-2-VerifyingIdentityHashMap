@@ -2,7 +2,7 @@
 Deductive verification case study in which we formally verify [Java's
 `IdentityHashMap`](http://hg.openjdk.java.net/jdk7u/jdk7u/jdk/file/4dd5e486620d/src/share/classes/java/util/IdentityHashMap.java).
 We used [JML](https://www.cs.ucf.edu/~leavens/JML/index.shtml) for
-formal specification and [KeY](https://www-key-project.org) as
+formal specification and [KeY](https://www.key-project.org) as
 interactive theorem prover.  We used
 [JJBMC](https://github.com/JonasKlamroth/JJBMC) and
 [JUnit](https://junit.org) to gain confidence while engineering the
