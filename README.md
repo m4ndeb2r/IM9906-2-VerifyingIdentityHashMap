@@ -34,9 +34,9 @@ This projected is related to the IM9906-2-IdentityHashMapSpecTester project (see
 unittests for testing the JML-specs, for example to see if the specified class invariants hold at all time.
 
 # How to run 
-To load the existing proof files in the KeY tool, follow these steps:
-1. Clone the repository
-1. In the folder `/key', start the key tool: `java -Xmx8G -jar ./key-exe-weigl_ihmapCaseStudy-202201301531.jar`. (The `-Xmx8G` is optional, and can be adjusted as one pleases.
+This repository contains a number of existing proof files for 15 methods of the `IdentityHashMap`. To load the existing proof files in the KeY tool, follow these steps:
+1. Clone the repository on your computer
+1. In the folder `/key`, start the key tool: `java -Xmx8G -jar ./key-exe-weigl_ihmapCaseStudy-202201301531.jar`. (The `-Xmx8G` is optional, and can be adjusted as one pleases.
 1. Load any proof file from the folder `/KeY-proof-files/VerifiedIdentityHashMap`. (Note that the proof files are compressed, and must be unzipped first. The unzipped `*.proof` files can then be loaded with KeY.)  
 
 # Project setup (from scratch)
