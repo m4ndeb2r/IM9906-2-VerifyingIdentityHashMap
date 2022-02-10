@@ -28,13 +28,18 @@ presentation purposes):
    tools have slightly different syntaxes and sets of supported
    constructs.
 
-
 # Purpose
 Formal analysis of OpenJDK's [`IdentityHashMap`](http://hg.openjdk.java.net/jdk7u/jdk7u/jdk/file/4dd5e486620d/src/share/classes/java/util/IdentityHashMap.java).
 This projected is related to the IM9906-2-IdentityHashMapSpecTester project (see: https://github.com/m4ndeb2r/IM9906-2-IdentityHashMapSpecTester), providing
 unittests for testing the JML-specs, for example to see if the specified class invariants hold at all time.
 
-# Setup
+# How to run 
+To load the existing proof files in the KeY tool, follow these steps:
+1. Clone the repository
+1. In the folder `/key', start the key tool: `java -Xmx8G -jar ./key-exe-weigl_ihmapCaseStudy-202201301531.jar`. (The `-Xmx8G` is optional, and can be adjusted as one pleases.
+1. Load any proof file from the folder `/KeY-proof-files/VerifiedIdentityHashMap`. (Note that the proof files are compressed, and must be unzipped first. The unzipped `*.proof` files can then be loaded with KeY.)  
+
+# Project setup (from scratch)
 To replicate the setup of the project, follow the steps below:
 1. create a KeY project in Eclipse (use Eclipse 2020-03, with KeY plugin 2.6.3),
 1. prepare the class for verification with KeY,
